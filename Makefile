@@ -4,8 +4,9 @@ CONTAINER_NAME ?= test-pod-123
 
 build: clean
 	DOCKER_BUILDKIT=1 docker image build \
-                          --no-cache \
-                          --tag $(DOCKER_TAG) .
+			--build-arg USERNAME=$(CONTAINER_USERNAME) \
+                        --no-cache \
+                        --tag $(DOCKER_TAG) .
 
 run-direct: build 
 	docker run -it --rm --name $(CONTAINER_NAME)  \
