@@ -10,7 +10,6 @@ RUN groupadd --gid $USER_GID $USERNAME \
     
 RUN apt-get update 
 
-
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
