@@ -1,6 +1,6 @@
-USERNAME = scatman
-DOCKER_TAG = test-pod
-CONTAINER_NAME = test-pod-123
+USERNAME ?= scatman
+DOCKER_TAG ?= test-pod
+CONTAINER_NAME ?= test-pod-123
 
 build: clean
 	DOCKER_BUILDKIT=1 docker image build \
@@ -18,12 +18,8 @@ run-direct-again: build
 		$(DOCKER_TAG) bash
 
 test-mount: 
-	docker exec -it $(CONTAINER_NAME) ls ./some_subdir && \
+	docker exec -it $(CONTAINER_NAME) ls -ahtlr ./some_subdir && \
 	docker exec -it $(CONTAINER_NAME) touch ./some_subdir/something
-
-# run-direct:
-# 	docker run -it --rm --name test-pod  \
-# 		test-podman bash
 
 DOCKER_HOST:
 	@podman info --format '{{.Host.RemoteSocket.Path}}'
