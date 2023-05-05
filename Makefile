@@ -1,4 +1,4 @@
-USERNAME ?= scatman
+CONTAINER_USERNAME ?= scatman
 DOCKER_TAG ?= test-pod
 CONTAINER_NAME ?= test-pod-123
 
@@ -9,12 +9,12 @@ build: clean
 
 run-direct: build 
 	docker run -it --rm --name $(CONTAINER_NAME)  \
-		-v ./some_subdir:/home/$(USERNAME)/some_subdir \
+		-v ./some_subdir:/home/$(CONTAINER_USERNAME)/some_subdir \
 		$(DOCKER_TAG) bash
 
 run-direct-again: build 
 	docker run -it --rm --name $(CONTAINER_NAME)  \
-		--mount type=bind,source=./some_subdir,target=/home/$(USERNAME)/some_subdir,relabel=shared \
+		--mount type=bind,source=./some_subdir,target=/home/$(CONTAINER_USERNAME)/some_subdir,relabel=shared \
 		$(DOCKER_TAG) bash
 
 test-mount: 
@@ -37,6 +37,6 @@ nuke-volumes:
 
 clean-images:
 	@echo "=============Cleaning images"
-	docker rmi $(DOCKER_TAG) || true
+	docker images ls | tr -s ' ' | tail -n+2 | cut -d ' ' -f3 | xargs -I {} docker rmi {}
 
 clean: nuke-containers nuke-volumes clean-images
