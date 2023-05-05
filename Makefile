@@ -1,26 +1,26 @@
-CONTAINER_USERNAME ?= scatman
+CONT_USER ?= scatman
 DOCKER_TAG ?= test-pod
-CONTAINER_NAME ?= test-pod-123
+CONT_NAME ?= test-pod-123
 
 build: clean
 	DOCKER_BUILDKIT=1 docker image build \
-			--build-arg USERNAME=$(CONTAINER_USERNAME) \
+			--build-arg USERNAME=$(CONT_USER) \
                         --no-cache \
                         --tag $(DOCKER_TAG) .
 
 run-direct: build 
-	docker run -it --rm --name $(CONTAINER_NAME)  \
-		-v ./some_subdir:/home/$(CONTAINER_USERNAME)/some_subdir \
+	docker run -it --rm --name $(CONT_NAME)  \
+		-v ./some_subdir:/home/$(CONT_USER)/some_subdir \
 		$(DOCKER_TAG) bash
 
 run-direct-again: build 
-	docker run -it --rm --name $(CONTAINER_NAME)  \
-		--mount type=bind,source=./some_subdir,target=/home/$(CONTAINER_USERNAME)/some_subdir,relabel=shared \
+	docker run -it --rm --name $(CONT_NAME)  \
+		--mount type=bind,source=./some_subdir,target=/home/$(CONT_USER)/some_subdir,relabel=shared \
 		$(DOCKER_TAG) bash
 
 test-mount: 
-	docker exec -it $(CONTAINER_NAME) ls -ahtlr ./some_subdir && \
-	docker exec -it $(CONTAINER_NAME) touch ./some_subdir/something
+	docker exec -it $(CONT_NAME) ls -ahtlr ./ ./some_subdir && \
+	docker exec -it $(CONT_NAME) touch ./some_subdir/something
 
 DOCKER_HOST:
 	@podman info --format '{{.Host.RemoteSocket.Path}}'
