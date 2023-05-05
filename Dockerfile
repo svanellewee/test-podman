@@ -14,4 +14,4 @@ RUN apt-get update
 USER $USERNAME
 WORKDIR /home/$USERNAME
 
-VOLUME /mnt/bla
+COPY --chown=$USER_UID:$USER_GID some_subdir/ some_subdir/
