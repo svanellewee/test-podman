@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  test-thing:
+    image: "${DOCKER_TAG}"
+    volumes:
+      - ./some_subdir:/home/app/some_subdir
+    command:
+      - /bin/bash
+      - -c
+      - "sleep infinity"
+
