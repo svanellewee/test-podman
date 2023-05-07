@@ -9,8 +9,8 @@ build: clean
                         --tag $(DOCKER_TAG) .
 
 run-direct: build 
-	docker run -it --rm --name $(CONT_NAME)  \
-		-v ./some_subdir:/home/$(CONT_USER)/some_subdir \
+	docker run -it --userns=keep-id --rm --name $(CONT_NAME)  \
+		-v ./some_subdir:/home/$(CONT_USER)/some_subdir:Z \
 		$(DOCKER_TAG) bash
 
 run-direct-again: build 
