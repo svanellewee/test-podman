@@ -1,9 +1,11 @@
 version: '3.8'
 services:
   test-thing:
+    user: ${CONT_USER}
+    userns_mode: "keep-id"
     image: "${DOCKER_TAG}"
     volumes:
-      - ./some_subdir:/home/app/some_subdir
+      - ./some_subdir:/home/${CONT_USER}/some_subdir:Z
     command:
       - /bin/bash
       - -c
